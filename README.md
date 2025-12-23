@@ -14,6 +14,7 @@ There can be lots of features in a college app. The app aims to comepelete secur
 Note : This just a demo which I create this the picture of my college in mind. 
 
 ## Tech Stacks
-SpringBoot, SpringDataJPA, Spring Security, Eureka Client and Server.
+Frontend : ReactJS, TailwindCSS.
+Backend : SpringBoot, SpringDataJPA, Spring Security, Eureka Client and Server.
 
 ## Installation
