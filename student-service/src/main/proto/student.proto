@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "student.grpc";
+option java_outer_classname = "StudentProto";
+
+service StudentAttendanceService {
+  rpc IncreaseAttendance (IncreaseAttendanceRequest)
+      returns (IncreaseAttendanceResponse);
+}
+
+service StudentService {
+  rpc getStudent(StudentRequest) returns (AttendanceResponse);
+}
+
+message StudentRequest {
+  string studentId = 1;
+  string groupNo=2;
+  string sectionNo=3;
+  string semester=4;
+  string branch=5;
+}
+
+message AttendanceResponse {
+  bool success = 1;
+}
+
+message IncreaseAttendanceRequest {
+  string studentId = 1;
+}
+
+message IncreaseAttendanceResponse {
+  bool success = 1;
+}

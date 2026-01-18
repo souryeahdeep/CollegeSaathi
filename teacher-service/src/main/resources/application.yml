@@ -1,0 +1,44 @@
+spring:
+  security:
+    user:
+      password: user
+  application:
+    name: Teacher-Service
+  banner:
+    location: classpath:banner.txt
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: sourya3110
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        naming:
+          physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+  main:
+    banner-mode: off
+
+
+app:
+  message: "Welcome To Teacher System"
+  author: "Souryadeep"
+logging:
+  level:
+    org:
+      springframework:
+        boot:
+          devtools: DEBUG
+
+server:
+  address: 0.0.0.0
+  port: 8081
+grpc:
+  client:
+    studentService:
+      address: static://localhost:9090
+      negotiationType: PLAINTEXT
