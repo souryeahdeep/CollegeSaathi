@@ -17,6 +17,11 @@ Note : This just a demo which I create this the picture of my college in mind.
 Frontend : ReactJS, TailwindCSS.
 Backend : SpringBoot, SpringDataJPA, Spring Security, Eureka Client and Server.
 
+## Demo
+👉 [Click here to watch the demo]((https://drive.google.com/drive/folders/1F5wE5cbZ2SVds7H7xrDOFPR-J2V-cWJD))
+
+
+
 ## Prerequisites
 
 Before setting up CollegeSaathi, ensure you have the following installed on your system:
