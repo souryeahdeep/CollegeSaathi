@@ -1,7 +1,7 @@
 # CollegeSaathi
 The App that controlls everything in College. 
 Divided into multiple microservices, it provides all the basic needs that a college system required.
-1. QR Based Attendance System : Teacher can generate a qr (on basis of there class) and student will scan it for getting the attendance of the class. [Student needs to be in the college campus and connected to the college wifi]
+1. QR Based Attendance System : Teacher can generate a qr (on basis of there class) and student will scan it for getting the attendance of the class. [Student needs to be in the college campus and connected to college wifi for scanning the qr code.]
 2. Admins can add teachers and students. They can add the classes of the teacher.
 3. Student can log into their account using ID no. They can update details, fetch result card of the last semester and basically everything that a student need to access.
 
@@ -134,17 +134,37 @@ mvn spring-boot:run
 1. **Eureka Dashboard**: Open http://localhost:8761 in your browser to see all registered services
 2. **Check Service Health**: Verify that all microservices (admin-service, student-service, teacher-service) are registered with Eureka
 
-### Step 7: Frontend Setup (If Applicable)
+### Step 7: Frontend Setup
 
-If the repository includes a React frontend:
+The main repository contains a `Frontend` folder with two separate frontend applications:
+
+#### Frontend Structure
+- **student_frontend**: Student-facing web application
+- **official_frontend**: Administrative and teacher-facing web application
+
+Both frontends are built with React and Vite, and can be started independently.
+
+#### Running Student Frontend
 
 ```bash
-cd frontend  # Navigate to frontend directory
+cd Frontend/student_frontend
 npm install  # Install dependencies
-npm start    # Start the development server
+npm run dev  # Start the development server
 ```
 
-The frontend should be accessible at http://localhost:3000
+The student frontend will be accessible at http://localhost:5173 (or the next available port).
+
+#### Running Official Frontend
+
+```bash
+cd Frontend/official_frontend
+npm install  # Install dependencies
+npm run dev  # Start the development server
+```
+
+The official frontend will be accessible at http://localhost:5173 (or the next available port).
+
+**Note**: If you want to run both frontends simultaneously, you may need to modify the port configuration in the Vite config file for one of them, or Vite will automatically assign different ports.
 
 ## Alternative: Running with Docker (Optional)
 
