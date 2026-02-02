@@ -18,7 +18,7 @@ Frontend : ReactJS, TailwindCSS.
 Backend : SpringBoot, SpringDataJPA, Spring Security, Eureka Client and Server.
 
 ## Demo
-👉 [Click here to watch the demo](https://drive.google.com/file/d/1ioaXySbreSNSi3ZjIN-GtFgbonAcaI4k/view?usp=drive_link)
+👉 [Click here to watch the demo](https://youtu.be/6NYnYtlq7jg)
 
 
 
