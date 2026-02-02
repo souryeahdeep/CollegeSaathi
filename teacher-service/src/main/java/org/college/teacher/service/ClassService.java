@@ -45,4 +45,8 @@ public class ClassService {
         return "Added Successfully";
     }
 
+    public List<ClassEntity> allotedClass(){
+       return classRepo.findAll();
+    }
+
 }

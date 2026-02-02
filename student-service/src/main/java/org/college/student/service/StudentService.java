@@ -2,6 +2,7 @@ package org.college.student.service;
 
 
 import io.grpc.stub.StreamObserver;
+import lombok.extern.slf4j.Slf4j;
 import org.college.student.dto.StudentDTO;
 import org.college.student.entity.Student;
 import org.college.student.repo.StudentRepo;
@@ -16,6 +17,7 @@ import student.grpc.StudentServiceGrpc;
 import java.time.Year;
 import java.util.*;
 
+@Slf4j
 @Service
 public class StudentService extends StudentServiceGrpc.StudentServiceImplBase {
     private final StudentRepo studentRepo;
@@ -30,9 +32,9 @@ public class StudentService extends StudentServiceGrpc.StudentServiceImplBase {
     public boolean addStudent(StudentDTO studentDTO) {
         try {
             String studentId = String.format("JIS/%d%04d", Year.now().getValue(), studentRepo.count() + 1);
-
             studentDTO.setStudentId(studentId);
             studentRepo.save(studentMapper.studentDTOToStudent(studentDTO));
+            log.info("Student {} has been added", studentId);
             return true;
         } catch (Exception e) {
             return false;
@@ -76,7 +78,7 @@ public class StudentService extends StudentServiceGrpc.StudentServiceImplBase {
         } else {
             student.setPresent(student.getPresent() + 1);
             studentRepo.save(student);
-            System.out.println("Attendance marked successfully");
+            log.info("Attendance Marked Successfully");
         }
         return true;
     }
@@ -93,13 +95,11 @@ public class StudentService extends StudentServiceGrpc.StudentServiceImplBase {
     @Override
     public void getStudent(StudentRequest request, StreamObserver<AttendanceResponse> responseObserver) {
         Student student = studentRepo.findById(request.getStudentId()).orElse(null);
-
         if (student == null) {
             responseObserver.onNext(AttendanceResponse.newBuilder().setSuccess(false).build());
             responseObserver.onCompleted();
             return;
         }
-
         boolean matches = student.getBranch().equals(request.getBranch()) && student.getGroup().equals(Integer.parseInt(request.getGroupNo())) && student.getSection().equals(Integer.parseInt(request.getSectionNo()));
         responseObserver.onNext(AttendanceResponse.newBuilder().setSuccess(matches).build());
         responseObserver.onCompleted();

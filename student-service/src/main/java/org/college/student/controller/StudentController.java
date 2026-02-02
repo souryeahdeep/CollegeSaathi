@@ -40,7 +40,6 @@ public class StudentController {
                                                         @RequestParam Integer sem,
                                                         @RequestParam Integer group,
                                                         @RequestParam Integer section) {
-        System.out.println(branch+" "+sem+" "+group+" "+section);
         return ResponseEntity.ok().body(studentService.fetchStudentsByBranchSemesterGroupAndSection(branch, sem, group, section));
     }
 

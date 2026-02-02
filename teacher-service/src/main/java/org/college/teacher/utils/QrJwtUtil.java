@@ -27,7 +27,7 @@ public class QrJwtUtil {
     public String generateQrToken(AttendanceSession attendanceSession) {
         Map<String,Object> map = new HashMap<>();
         map.put("attendanceId",attendanceSession.getAttendanceId());
-        map.put("classId",attendanceSession.getClassId());
+        map.put("classId",attendanceSession.getStream());
         map.put("teacherId",attendanceSession.getTeacherId());
         map.put("group",attendanceSession.getGroupNo());
         map.put("section",attendanceSession.getSectionNo());

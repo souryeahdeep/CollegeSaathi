@@ -7,7 +7,7 @@ spring:
   banner:
     location: classpath:banner.txt
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
+    url: jdbc:postgresql://localhost:5432/Teacher
     username: postgres
     password: sourya3110
   jpa:

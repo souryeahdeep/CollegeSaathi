@@ -23,6 +23,7 @@ public class TeacherController {
     private final ClassService classService;
     private final TeacherService teacherService;
     private final AttendanceService attendanceService;
+
     public TeacherController(ClassService classService, TeacherService teacherService, AttendanceService attendanceService) {
         this.classService = classService;
         this.teacherService = teacherService;
@@ -33,6 +34,7 @@ public class TeacherController {
     /**
      *
      * Accept the Page Number and return 5 teacher for each page.
+     *
      * @return List of Teachers
      */
     @GetMapping("/{page}")
@@ -45,6 +47,7 @@ public class TeacherController {
     /**
      *
      * Adds Teacher to the DB
+     *
      * @return Success status with a message
      */
     @PostMapping("/add")
@@ -61,14 +64,15 @@ public class TeacherController {
     /**
      *
      * Updates Teacher's Details
+     *
      * @return Success Status with a message
      */
     @PutMapping("/update")
     public ResponseEntity<String> updateTeacher(@RequestBody TeacherDTO teacherDTO) {
-        try{
+        try {
             teacherService.updateTeacher(teacherDTO);
             return ResponseEntity.status(HttpStatus.ACCEPTED).body("Modified");
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Cannot update");
         }
 
@@ -78,15 +82,16 @@ public class TeacherController {
     /**
      *
      * Removes a teacher by accepting its Mail ID.
+     *
      * @return Success Status with a message
      */
     @DeleteMapping("/delete")
     public ResponseEntity<String> removeTeacher(@RequestParam String mailId) {
         try {
-            if(teacherService.removeTeacher(mailId)) {
+            if (teacherService.removeTeacher(mailId)) {
                 return ResponseEntity.status(HttpStatus.ACCEPTED).body("Removed Successfully");
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Unable to remove Teacher");
         }
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Removed Successfully");
@@ -95,14 +100,15 @@ public class TeacherController {
     /**
      *
      * Accepts class, and adds to the DB
+     *
      * @return Status with Message
      */
     @PostMapping("/assignClass")
     public ResponseEntity<String> assignClass(@RequestBody List<ClassEntityDTO> classEntityList) {
-        try{
-           return ResponseEntity.status(HttpStatus.ACCEPTED).body(classService.addClass(classEntityList));
+        try {
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(classService.addClass(classEntityList));
         } catch (Exception e) {
-            return  ResponseEntity.status(HttpStatus.CONFLICT).body("Cannot add Class");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Cannot add Class");
         }
     }
 
@@ -111,14 +117,15 @@ public class TeacherController {
     /**
      *
      * Accepts Teacher ID and Password, checks if the teacher is present and matches the passwords
+     *
      * @return Allotted classes for the present Day
      */
     @PostMapping("/login")
     public ResponseEntity<List<ClassEntity>> allottedClasses(@RequestBody TeacherLoginDetails teacherLoginDetails) {
-        if(teacherService.exists(teacherLoginDetails)){
+        if (teacherService.exists(teacherLoginDetails)) {
             List<ClassEntity> classEntities = classService.allottedClasses(teacherLoginDetails.getId());
             return new ResponseEntity<>(classEntities, HttpStatus.OK);
-        }else{
+        } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
@@ -133,13 +140,13 @@ public class TeacherController {
      */
     @PostMapping("/change-password")
     public ResponseEntity<Boolean> changePassword(@RequestParam String name, @RequestParam String currentPassword, @RequestParam String newPassword) {
-       try {
-           if(teacherService.changePassword(name,currentPassword,newPassword))
-               return ResponseEntity.ok().body(true);
-       }catch (Exception e){
-           return ResponseEntity.status(HttpStatus.CONFLICT).body(false);
-       }
-       return ResponseEntity.status(HttpStatus.CONFLICT).body(false);
+        try {
+            if (teacherService.changePassword(name, currentPassword, newPassword))
+                return ResponseEntity.ok().body(true);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(false);
+        }
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(false);
     }
 
     /**
@@ -165,11 +172,16 @@ public class TeacherController {
      */
     @PostMapping("/attendance/scan")
     public ResponseEntity<Boolean> validateAttendance(@RequestBody StudentScanRequest studentScanRequest) throws Exception {
-        boolean res=attendanceService.scanAttendance(studentScanRequest);
-        if(!res){
+        boolean res = attendanceService.scanAttendance(studentScanRequest);
+        if (!res) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
         }
         return ResponseEntity.ok(true);
+    }
+
+    @GetMapping("/allotedClasses")
+    public ResponseEntity<List<ClassEntity>> fetchAllotedClasses() {
+        return ResponseEntity.ok().body(classService.allotedClass());
     }
 
 

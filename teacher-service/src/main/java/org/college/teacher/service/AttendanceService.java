@@ -1,5 +1,6 @@
 package org.college.teacher.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.college.teacher.entity.*;
 import org.college.teacher.repo.AttendanceRecordRepo;
 import org.college.teacher.repo.AttendanceSessionRepository;
@@ -7,13 +8,14 @@ import org.college.teacher.utils.QrCodeGenerator;
 import org.college.teacher.utils.QrJwtUtil;
 import org.college.teacher.utils.StudentJwtUtil;
 import org.springframework.stereotype.Service;
-import student.grpc.StudentRequest;
 import student.grpc.StudentServiceGrpc;
+import student.grpc.StudentRequest;
 
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.UUID;
 
+@Slf4j
 @Service
 public class AttendanceService {
     private final QrJwtUtil jwtUtil;
@@ -68,10 +70,12 @@ public class AttendanceService {
                 .orElseThrow(() -> new RuntimeException("Invalid attendance session"));
 
         if (LocalDateTime.now().isAfter(session.getExpiryTime())) {
-            throw new RuntimeException("QR code expired");
+            log.info("Attendance session has expired");
+            return false;
         }
         if (attendanceRecordRepo.existsByAttendanceIdAndStudentId((String) attendanceSession.get("attendanceId"), request.getStudentId())) {
-            throw new RuntimeException("  already marked");
+            log.info("Attendance has already been scan");
+             return true;
         }
         AttendanceRecord record = new AttendanceRecord();
         record.setAttendanceId(attendanceSession.get("attendanceId").toString());
@@ -85,7 +89,9 @@ public class AttendanceService {
                 .setGroupNo(attendanceSession.get("group").toString())
                 .setSectionNo(attendanceSession.get("section").toString())
                 .setSemester(attendanceSession.get("semester").toString()).build();
+        System.out.println(studentRequest.getSectionNo()+" "+studentRequest.getGroupNo()+" "+studentRequest.getStudentId());
         if (!studentServiceBlockingStub.getStudent(studentRequest).getSuccess()) {
+            log.info("Student not found");
             return false;
         }
         attendanceRecordRepo.save(record);
