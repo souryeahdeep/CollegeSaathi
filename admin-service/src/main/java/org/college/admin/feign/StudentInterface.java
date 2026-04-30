@@ -2,7 +2,6 @@ package org.college.admin.feign;
 
 import org.college.admin.dto.StudentResponseDTO;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +13,7 @@ public interface StudentInterface {
     ResponseEntity<String> addStudent(@RequestBody StudentResponseDTO studentDTO);
 
     @GetMapping("/student/get")
-    ResponseEntity<List<StudentResponseDTO>> getAllStudents(@RequestParam String branch, @RequestParam Integer year);
+    ResponseEntity<List<StudentResponseDTO>> getAllStudents(@RequestParam String branch, @RequestParam Integer semester);
 
         @GetMapping("/student")
         ResponseEntity<List<StudentResponseDTO>> getAllStudents();

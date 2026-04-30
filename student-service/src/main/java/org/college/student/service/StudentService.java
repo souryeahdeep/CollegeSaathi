@@ -64,6 +64,8 @@ public class StudentService extends StudentServiceGrpc.StudentServiceImplBase {
     }
 
     public List<StudentDTO> fetchStudents() {
+        // safe debug print: only print if a student exists
+        studentRepo.findAll().stream().findFirst().ifPresent(s -> System.out.println(s.getStudentName() + " " + s.getSemester()));
         return studentRepo.findAll().stream().map(studentMapper::studentToStudentDTO).toList();
     }
 
@@ -83,8 +85,11 @@ public class StudentService extends StudentServiceGrpc.StudentServiceImplBase {
         return true;
     }
 
-    public List<StudentDTO> fetchStudentsByBranchAndYear(String branch, Integer year) {
-        return studentRepo.findStudentsByBranch(branch).stream().filter(s -> s.getStudentId().contains(String.valueOf(Year.now().getValue() - year + 1))).map(studentMapper::studentToStudentDTO).toList();
+    public List<StudentDTO> fetchStudentsByBranchAndSem(String branch, Integer sem) {
+        return studentRepo.findStudentsByBranch(branch).stream()
+                .filter(s -> Objects.equals(s.getSemester(), sem))
+                .map(studentMapper::studentToStudentDTO)
+                .toList();
     }
 
     public @Nullable List<StudentDTO> fetchStudentsByBranchSemesterGroupAndSection(String branch, Integer sem, Integer group, Integer section) {

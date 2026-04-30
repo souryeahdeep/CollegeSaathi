@@ -7,7 +7,7 @@ import org.college.teacher.entity.StudentScanRequest;
 import org.college.teacher.entity.TeacherLoginDetails;
 import org.college.teacher.service.AttendanceService;
 import org.college.teacher.service.ClassService;
-import org.college.teacher.service.TeacherService;
+import org.college.teacher.service.impl.TeacherServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,10 +21,10 @@ import java.util.List;
 @RestController
 public class TeacherController {
     private final ClassService classService;
-    private final TeacherService teacherService;
+    private final TeacherServiceImpl teacherService;
     private final AttendanceService attendanceService;
 
-    public TeacherController(ClassService classService, TeacherService teacherService, AttendanceService attendanceService) {
+    public TeacherController(ClassService classService, TeacherServiceImpl teacherService, AttendanceService attendanceService) {
         this.classService = classService;
         this.teacherService = teacherService;
         this.attendanceService = attendanceService;
@@ -86,15 +86,15 @@ public class TeacherController {
      * @return Success Status with a message
      */
     @DeleteMapping("/delete")
-    public ResponseEntity<String> removeTeacher(@RequestParam String mailId) {
+    public ResponseEntity<String> removeTeacher(@RequestParam String teacherId) {
         try {
-            if (teacherService.removeTeacher(mailId)) {
+            if (teacherService.removeTeacher(teacherId)) {
                 return ResponseEntity.status(HttpStatus.ACCEPTED).body("Removed Successfully");
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Unable to remove Teacher");
         }
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Removed Successfully");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Can't Remove Successfully");
     }
 
     /**

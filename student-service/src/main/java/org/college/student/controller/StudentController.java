@@ -28,10 +28,17 @@ public class StudentController {
         return ResponseEntity.status(HttpStatus.CREATED).body(studentService.addStudent(studentDTO));
     }
 
-    // GET /student/get?branch=...&year=...
-    @GetMapping(value = "/get", params = {"branch", "year"})
-    public ResponseEntity<List<StudentDTO>> getAllStudents(@RequestParam String branch, @RequestParam Integer year) {
-        return ResponseEntity.ok().body(studentService.fetchStudentsByBranchAndYear(branch, year));
+    @DeleteMapping("/delete")
+    public ResponseEntity<Boolean> deleteStudent(@RequestParam String id) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(studentService.deleteStudent(id));
+    }
+
+
+    // APIs used by Teacher and Admin
+    // GET /student/get?branch=...&semester=...
+    @GetMapping(value = "/get", params = {"branch", "semester"})
+    public ResponseEntity<List<StudentDTO>> getAllStudents(@RequestParam String branch, @RequestParam Integer semester) {
+        return ResponseEntity.ok().body(studentService.fetchStudentsByBranchAndSem(branch, semester));
     }
 
     // GET /student/get?branch=...&year=...&group=...&section=...
@@ -43,16 +50,11 @@ public class StudentController {
         return ResponseEntity.ok().body(studentService.fetchStudentsByBranchSemesterGroupAndSection(branch, sem, group, section));
     }
 
-
     @GetMapping
     public ResponseEntity<List<StudentDTO>> getAllStudents() {
         return ResponseEntity.ok().body(studentService.fetchStudents());
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<Boolean> deleteStudent(@RequestParam String id) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(studentService.deleteStudent(id));
-    }
 
     // APIs used by Admin and Student
     @PutMapping("/update")
@@ -60,6 +62,7 @@ public class StudentController {
         return ResponseEntity.ok().body(studentService.updateStudent(studentDTOS));
 
     }
+
 
     // APIs used by Student
     @GetMapping("/login")

@@ -2,13 +2,12 @@ package org.college.student.dto;
 
 import lombok.*;
 
-@Getter
-@Setter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class StudentDTO {
     private String studentName;
     @EqualsAndHashCode.Include
@@ -18,6 +17,7 @@ public class StudentDTO {
     private Integer totalClass;
     private Integer present;
     private String branch;
+    private Integer semester;
     @EqualsAndHashCode.Include
     private Long rollNo;
     @EqualsAndHashCode.Include

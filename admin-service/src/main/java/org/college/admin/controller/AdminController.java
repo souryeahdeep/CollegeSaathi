@@ -1,5 +1,6 @@
 package org.college.admin.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.college.admin.dto.AdminDTO;
 import org.college.admin.dto.StudentResponseDTO;
 import org.college.admin.entity.Admin;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+@Slf4j
 @CrossOrigin(value = {"http://localhost:5173", "http://localhost:5174"})
 @RequestMapping("/admin")
 @RestController
@@ -58,10 +60,11 @@ public class AdminController {
             return ResponseEntity.ok("Updated Successfully");
     }
 
-    @DeleteMapping("/teacher/delete/JIS/{year}/{id}")
-    ResponseEntity<String> removeTeacher(@PathVariable String year, @PathVariable String id){
+    @DeleteMapping("/teacher/delete")
+    ResponseEntity<String> removeTeacher(@RequestParam String teacherId){
         try{
-            teacherInterface.removeTeacher(year,id);
+            log.info("Teaacher Id : {}", teacherId);
+            teacherInterface.removeTeacher(teacherId);
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }
@@ -77,6 +80,16 @@ public class AdminController {
        }catch (Exception e){
           return new ResponseEntity<>(HttpStatus.NOT_FOUND);
        }
+    }
+
+    @GetMapping("/student/get")
+    public ResponseEntity<List<StudentResponseDTO>> getAllStudents(@RequestParam String branch,@RequestParam Integer semester) {
+        try {
+            List<StudentResponseDTO> studentResponseDTO = studentInterface.getAllStudents(branch, semester).getBody();
+            return new ResponseEntity<>(studentResponseDTO, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping("/student/add")
