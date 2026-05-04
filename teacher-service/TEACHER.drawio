@@ -1,0 +1,13 @@
+<mxfile host="drawio-plugin" modified="2026-04-30T20:20:20.198Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" version="22.1.22" etag="RqUemKEnt8gDTrEqb0YN" type="embed">
+  <diagram id="Twz6sVfNnGOti8a-NAnE" name="Page-1">
+    <mxGraphModel dx="713" dy="393" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="4" value="&lt;h1&gt;TEACHER REQUIREMENTS [ FULL ]&amp;nbsp;&lt;/h1&gt;&lt;div style=&quot;font-size: 17px;&quot;&gt;1. Can take attendance of student using QR Code System.&lt;/div&gt;&lt;div style=&quot;font-size: 17px;&quot;&gt;2. They can access the attendance of the Students of their class and also Overall Attendance of the Mentees assigned under them.&amp;nbsp;&lt;/div&gt;&lt;div style=&quot;font-size: 17px;&quot;&gt;3.&amp;nbsp;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="90" y="50" width="570" height="280" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
