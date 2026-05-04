@@ -24,7 +24,7 @@ public class StudentController {
 
     // APIs used by Admin
     @PostMapping("/add")
-    public ResponseEntity<Boolean> addStudent(@RequestBody StudentDTO studentDTO) {
+    public ResponseEntity<String> addStudent(@RequestBody StudentDTO studentDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(studentService.addStudent(studentDTO));
     }
 
@@ -50,9 +50,16 @@ public class StudentController {
         return ResponseEntity.ok().body(studentService.fetchStudentsByBranchSemesterGroupAndSection(branch, sem, group, section));
     }
 
-    @GetMapping
-    public ResponseEntity<List<StudentDTO>> getAllStudents() {
-        return ResponseEntity.ok().body(studentService.fetchStudents());
+    @GetMapping(value = "/getStudentsWithLowAttendance")
+    public ResponseEntity<List<StudentDTO>> getStudentsWithLowAttendance(@RequestParam Integer attendanceLimit) {
+        return ResponseEntity.ok().body(studentService.getStudentsWithLowAttendance(attendanceLimit));
+    }
+
+
+
+    @GetMapping("/{page}")
+    public ResponseEntity<List<StudentDTO>> getAllStudents(@PathVariable int page) {
+        return ResponseEntity.ok().body(studentService.fetchStudents(page));
     }
 
 
