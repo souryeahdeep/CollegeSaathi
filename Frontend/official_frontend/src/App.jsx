@@ -18,6 +18,7 @@ import FetchStudents from "./pages/FetchStudents";
 import AddDepartment from "./pages/AddDepartment";
 import AddCourse from "./pages/AddCourse";
 import AssignTeacher from "./pages/AssignTeacher";
+import SmartAttendanceInsights from "./pages/SmartAttendanceInsights";
 
 export default function App() {
   return (
@@ -44,6 +45,7 @@ export default function App() {
         <Route path="/department-create" element={<AddDepartment />} />
         <Route path="/course-add" element={<AddCourse />} />
         <Route path="/course-assign" element={<AssignTeacher />} />
+        <Route path="/smart-attendance" element={<SmartAttendanceInsights />} />
       </Routes>
     </BrowserRouter>
   );
