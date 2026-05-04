@@ -4,6 +4,7 @@ import org.college.admin.dto.AdminDTO;
 import org.college.admin.entity.Admin;
 import org.college.admin.repo.AdminRepo;
 import org.college.admin.utils.AdminMapper;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,5 +32,11 @@ public class AdminService {
         Admin admin = adminMapper.adminDTOToAdmin(adminDTO);
         adminRepo.save(admin);
         return "Admin added successfully";
+    }
+
+    public String updateAdmin(AdminDTO adminDTO) {
+        Admin admin = adminMapper.adminDTOToAdmin(adminDTO);
+        adminRepo.save(admin);
+        return "Admin updated successfully";
     }
 }

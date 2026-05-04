@@ -45,7 +45,6 @@ public class AdminController {
 
     @PostMapping("/teacher/add")
     public ResponseEntity<String> addTeacher(@RequestBody List<TeacherResponseDTO> teacherDTOList) {
-
         teacherInterface.addTeacher(teacherDTOList);
         return ResponseEntity.ok("Added Successfully");
     }
@@ -72,10 +71,10 @@ public class AdminController {
     }
 
     //APIs for Students
-    @GetMapping("/student")
-    public ResponseEntity<List<StudentResponseDTO>> getAllStudents() {
+    @GetMapping("/student/{page}")
+    public ResponseEntity<List<StudentResponseDTO>> getAllStudents(@PathVariable int page) {
        try {
-           List<StudentResponseDTO> studentResponseDTO = studentInterface.getAllStudents().getBody();
+           List<StudentResponseDTO> studentResponseDTO = studentInterface.getAllStudents(page).getBody();
            return new ResponseEntity<>(studentResponseDTO, HttpStatus.OK);
        }catch (Exception e){
           return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -94,12 +93,15 @@ public class AdminController {
 
     @PostMapping("/student/add")
     public ResponseEntity<String> addStudent(@RequestBody StudentResponseDTO studentResponseDTO) {
+        ResponseEntity<String> res;
         try{
-            studentInterface.addStudent(studentResponseDTO);
+             res = studentInterface.addStudent(studentResponseDTO);
+
+             log.info(res.toString());
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Unable to add student");
         }
-        return ResponseEntity.ok("Added Successfully");
+        return res;
     }
 
     @PutMapping("/student/update")
@@ -109,7 +111,7 @@ public class AdminController {
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Unable to update Student");
         }
-        return ResponseEntity.ok("Added Successfully");
+        return ResponseEntity.ok("UPDATED Successfully");
     }
 
     @DeleteMapping("/student/remove")
@@ -122,8 +124,20 @@ public class AdminController {
         return ResponseEntity.ok("Removed Successfully");
     }
 
+    @GetMapping("/student/getStudentsWithLowAttendance")
+    public ResponseEntity<List<StudentResponseDTO>> getStudentsWithLowAttendance(@RequestParam Integer attendanceLimit) {
+        try {
+            List<StudentResponseDTO> studentResponseDTO = studentInterface.getStudentsWithLowAttendance(attendanceLimit).getBody();
+            return new ResponseEntity<>(studentResponseDTO, HttpStatus.OK);
+        }catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+
     // APIs for Admin
-    @PostMapping("/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Boolean> adminLogin(@PathVariable String id) {
         if (adminService.isAdminPresent(id)) {
             return ResponseEntity.ok(true);
@@ -148,8 +162,8 @@ public class AdminController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<String> updateAdmin(@RequestBody AdminDTO teacherDTO) {
-        return ResponseEntity.ok().body("GET");
+    public ResponseEntity<String> updateAdmin(@RequestBody AdminDTO adminDTO) {
+        return ResponseEntity.ok().body(adminService.updateAdmin(adminDTO));
     }
 
 }

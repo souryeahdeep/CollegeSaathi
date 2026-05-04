@@ -3,6 +3,7 @@ package org.college.admin.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.User;
@@ -26,12 +27,17 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.disable())
+                // enable CORS so the CorsConfigurationSource bean is honored
+                .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(req -> req
-
+                        // allow preflight requests through without authentication
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
-                ).httpBasic(Customizer.withDefaults());
+                )
+                // support both HTTP Basic (for API clients) and form login (for browser sign-in)
+                .httpBasic(Customizer.withDefaults())
+                .formLogin(Customizer.withDefaults());
         return http.build();
     }
     @Bean

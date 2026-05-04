@@ -2,6 +2,7 @@ package org.college.admin.feign;
 
 import org.college.admin.dto.StudentResponseDTO;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,8 +16,8 @@ public interface StudentInterface {
     @GetMapping("/student/get")
     ResponseEntity<List<StudentResponseDTO>> getAllStudents(@RequestParam String branch, @RequestParam Integer semester);
 
-        @GetMapping("/student")
-        ResponseEntity<List<StudentResponseDTO>> getAllStudents();
+    @GetMapping("/student/{page}")
+    ResponseEntity<List<StudentResponseDTO>> getAllStudents(@PathVariable int page);
 
     @DeleteMapping("/student/delete")
     ResponseEntity<String> deleteStudent(@RequestParam String id);
@@ -24,4 +25,7 @@ public interface StudentInterface {
     // APIs used by Admin and Student
     @PutMapping("/student/update")
     ResponseEntity<String> updateStudent(@RequestBody StudentResponseDTO studentDTO);
+
+    @GetMapping("/student/getStudentsWithLowAttendance")
+    ResponseEntity<List<StudentResponseDTO>> getStudentsWithLowAttendance(@RequestParam Integer attendanceLimit);
 }
