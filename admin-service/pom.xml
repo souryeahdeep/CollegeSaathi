@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>org.college</groupId>
-    <artifactId>student</artifactId>
+    <artifactId>admin</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>student</name>
     <description>Admin Service</description>
@@ -188,6 +188,7 @@
                 </configuration>
             </plugin>
         </plugins>
+
     </build>
 
 </project>

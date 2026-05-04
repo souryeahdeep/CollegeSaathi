@@ -8,6 +8,8 @@ import org.college.student.entity.Student;
 import org.college.student.repo.StudentRepo;
 import org.college.student.utils.StudentMapper;
 import org.jspecify.annotations.Nullable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 import student.grpc.AttendanceResponse;
@@ -29,15 +31,15 @@ public class StudentService extends StudentServiceGrpc.StudentServiceImplBase {
         this.studentJwtUtil = studentJwtUtil;
     }
 
-    public boolean addStudent(StudentDTO studentDTO) {
+    public String addStudent(StudentDTO studentDTO) {
         try {
-            String studentId = String.format("JIS/%d%04d", Year.now().getValue(), studentRepo.count() + 1);
+            String studentId = String.format("JIS/%d/%04d", 2024, studentRepo.count() + 1);
             studentDTO.setStudentId(studentId);
             studentRepo.save(studentMapper.studentDTOToStudent(studentDTO));
             log.info("Student {} has been added", studentId);
-            return true;
+            return studentId;
         } catch (Exception e) {
-            return false;
+            return "ERROR";
         }
     }
 
@@ -63,8 +65,19 @@ public class StudentService extends StudentServiceGrpc.StudentServiceImplBase {
 
     }
 
-    public List<StudentDTO> fetchStudents() {
-        return studentRepo.findAll().stream().map(studentMapper::studentToStudentDTO).toList();
+    public List<StudentDTO> fetchStudents(int page) {
+        // page is expected as 1-based from caller; clamp to minimum 1
+        int pageSize = 20;
+        int pageNumber = Math.max(page, 1) - 1; // convert to 0-based for PageRequest
+
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by("studentId").ascending());
+        var pageResult = studentRepo.findAll(pageRequest);
+
+        // safe debug print: only print if a student exists
+        List<Student> content = pageResult.getContent();
+        content.stream().findFirst().ifPresent(s -> System.out.println(s.getStudentName() + " " + s.getSemester()));
+
+        return content.stream().map(studentMapper::studentToStudentDTO).toList();
     }
 
     public Student fetchStudent(String name, String id) {
@@ -83,8 +96,11 @@ public class StudentService extends StudentServiceGrpc.StudentServiceImplBase {
         return true;
     }
 
-    public List<StudentDTO> fetchStudentsByBranchAndYear(String branch, Integer year) {
-        return studentRepo.findStudentsByBranch(branch).stream().filter(s -> s.getStudentId().contains(String.valueOf(Year.now().getValue() - year + 1))).map(studentMapper::studentToStudentDTO).toList();
+    public List<StudentDTO> fetchStudentsByBranchAndSem(String branch, Integer sem) {
+        return studentRepo.findStudentsByBranch(branch).stream()
+                .filter(s -> Objects.equals(s.getSemester(), sem))
+                .map(studentMapper::studentToStudentDTO)
+                .toList();
     }
 
     public @Nullable List<StudentDTO> fetchStudentsByBranchSemesterGroupAndSection(String branch, Integer sem, Integer group, Integer section) {
@@ -115,5 +131,26 @@ public class StudentService extends StudentServiceGrpc.StudentServiceImplBase {
         response.put("student", res);
         response.put("token", studentJwtUtil.generateStudentToken(res.getStudentId()));
         return response;
+    }
+
+    public List<StudentDTO> getStudentsWithLowAttendance(Integer attendanceLimit) {
+        if (attendanceLimit == null) {
+            return Collections.emptyList();
+        }
+
+        return studentRepo.findAll().stream()
+                .filter(s -> {
+                    Integer total = s.getTotalClass();
+                    Integer present = s.getPresent();
+                    if (present == null) present = 0;
+                    // If total is null or zero, treat attendance as 0%
+                    if (total == null || total == 0) {
+                        return attendanceLimit > 0;
+                    }
+                    double percent = (present.doubleValue() * 100.0) / total.doubleValue();
+                    return percent < attendanceLimit;
+                })
+                .map(studentMapper::studentToStudentDTO)
+                .toList();
     }
 }

@@ -20,8 +20,8 @@ public interface TeacherInterface {
     @PutMapping("/teacher/update")
     ResponseEntity<String> updateTeacher(@RequestBody TeacherResponseDTO teacherDTO);
 
-    @DeleteMapping("/teacher/delete/JIS/{year}/{id}")
-    ResponseEntity<String> removeTeacher(@PathVariable String year, @PathVariable String id);
+    @DeleteMapping("/teacher/delete")
+    ResponseEntity<String> removeTeacher(@RequestParam String teacherId);
 
     @PostMapping("/teacher/assignClass")
     ResponseEntity<String> addClass(@RequestBody List<ClassEntityDTO> classEntityList);

@@ -26,6 +26,16 @@ const sections = [
       { label: "Assign Teacher to Course", path: "/course-assign" },
     ],
   },
+  {
+    title: "Student Analytics",
+    description: "Monitor student attendance and performance insights.",
+    accentBg: "bg-emerald-50",
+    accentText: "text-emerald-600",
+    actions: [
+      { label: "Low Attendance Insights", path: "/smart-attendance" },
+      { label: "View All Students", path: "/fetch-student" },
+    ],
+  },
 ];
 
 const AdminDashboard = () => {

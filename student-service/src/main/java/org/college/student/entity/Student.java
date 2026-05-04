@@ -30,8 +30,10 @@ public class Student {
 
     @Column(name = "present")
     private Integer present;
+
     @Column(name = "semester")
     private Integer semester;
+
     @Column(name="branch")
     private String branch;
 
@@ -58,6 +60,4 @@ public class Student {
 
     @Column(name = "blood_group")
     private String bloodGroup;
-
-
 }
